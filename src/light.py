@@ -18,8 +18,8 @@ class Light:
 
     def get_als_str(self) -> str:
         """ambient light"""
-        return self.ltr.lux
+        return f"{int(self.ltr.lux)} lum"
 
     def get_uvi_str(self) -> str:
         """UV Index"""
-        return self.ltr.uvi
+        return str(self.ltr.uvi)

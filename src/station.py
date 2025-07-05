@@ -5,6 +5,7 @@ from battery import Battery
 from display import Display
 from light import Light
 from temp_hum_pres import TempHumPres
+from wifi import WiFi
 
 
 class Station:
@@ -12,12 +13,28 @@ class Station:
         t0 = time.time_ns()
         self.display = Display()
         self.battery = Battery()
+        self.wifi = WiFi()  # TODO: drive with config
+
         self.temp_hum_pres = TempHumPres()
         self.air = Air()
         self.light = Light()
         print(f"Station loaded: {(time.time_ns() - t0) / 1_000_000_000}s")
 
-    def display_simple(self):
+    def welcome_display(self):
+        self.display.simple_text("Welcome to TWOS", 0)
+        self.display.horizontal_line(8)
+        self.display.simple_text(
+            f"B:{self.battery.get_voltage_str()}, W:{self.wifi.is_connected_str()}", 7
+        )
+
+        self.display.draw_weather_icon()
+
+    def warmup(self):
+        self.air.init_algo()
+
+    def sensor_display_simple(self):
+        self.display.clear()
+
         # BME280
         self.display.simple_text(f"Temp: {self.temp_hum_pres.get_temp_str()}", 0)
         self.display.simple_text(f"Pres: {self.temp_hum_pres.get_pressure_str()}", 1)
@@ -28,5 +45,10 @@ class Station:
         self.display.simple_text(f"TVOC: {self.air.get_tvoc_str()}", 4)
 
         # LTR390
-        self.display.simple_text(f"AmbL: {self.light.get_als_str()} lum", 5)
+        self.display.simple_text(f"AmbL: {self.light.get_als_str()}", 5)
         self.display.simple_text(f"UVi: {self.light.get_uvi_str()}", 6)
+
+        # Operations
+        self.display.simple_text(
+            f"B:{self.battery.get_voltage_str()}, W:{self.wifi.is_connected_str()}", 7
+        )

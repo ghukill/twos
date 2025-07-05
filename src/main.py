@@ -30,17 +30,13 @@ def main():
     try:
         station = Station()
 
-        # TODO: move to station method
-        station.display.simple_text("Welcome to TWOS", 0)
-        station.display.horizontal_line(8)
+        station.welcome_display()
         time.sleep(3)
 
-        # main loop
+        station.warmup()
+
         while True:
-            station.display.clear()
-
-            station.display_simple()
-
+            station.sensor_display_simple()
             time.sleep(5)
 
     except KeyboardInterrupt:

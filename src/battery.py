@@ -16,4 +16,6 @@ class Battery:
         return raw / 4095 * 3.6 * 2
 
     def get_voltage_str(self) -> str:
-        return "{:.2f} v".format(self.get_voltage())
+        if self.attached:
+            return "{:.2f}v".format(self.get_voltage())
+        return "None"
