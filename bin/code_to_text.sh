@@ -1,0 +1,1 @@
+uvx gitingest --exclude-pattern "firmwares, uv.lock" -o docs/code.txt
