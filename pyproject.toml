@@ -1,0 +1,8 @@
+[project]
+name = "twos"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "esptool>=4.9.0",
+    "ruff>=0.12.1",
+]

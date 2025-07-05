@@ -1,0 +1,3 @@
+- uv sensor
+- wifi module
+- sd card configuration

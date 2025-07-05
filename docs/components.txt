@@ -1,0 +1,14 @@
+2 x Assembled Adafruit HUZZAH32 – ESP32 Feather Board (with Stacking Headers) [ID:3619] = $43.90
+1 x Adalogger FeatherWing - RTC + SD Add-on For All Feather Boards[ID:2922] = $8.95
+1 x Large Plastic Project Enclosure - Weatherproof with Clear Top[ID:905] = $19.95
+5 x STEMMA QT / Qwiic JST SH 4-pin Cable - 100mm Long[ID:4210] = $4.75
+1 x Adafruit BME280 I2C or SPI Temperature Humidity Pressure Sensor (STEMMA QT) [ID:2652] = $14.95
+1 x Adafruit SGP30 Air Quality Sensor Breakout - VOC and eCO2 (STEMMA QT / Qwiic) [ID:3709] = $17.50
+2 x STEMMA QT / Qwiic JST SH 4-pin to Premium Male Headers Cable (150mm Long) [ID:4209] = $1.90
+1 x MicroSD card breakout board+[ID:254] = $7.50
+1 x Adafruit LTR390 UV Light Sensor - STEMMA QT / Qwiic[ID:4831] = $4.95
+1 x STEMMA QT / Qwiic JST SH 4-Pin Cable - 50mm Long[ID:4399] = $0.95
+1 x STEMMA QT / Qwiic JST SH 4-Pin Cable - 200mm Long[ID:4401] = $1.25
+1 x Assembled Adafruit FeatherWing OLED - 128x64 OLED Add-on (STEMMA QT / Qwiic) [ID:6313] = $15.95
+1 x Lithium Ion Polymer Battery - 3.7v 2500mAh[ID:328] = $14.95
+1 x PCB Coaster with Gold Adafruit Logo[ID:5719] = $0.00
