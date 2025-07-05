@@ -30,6 +30,8 @@ class Station:
         self.display.draw_weather_icon()
 
     def warmup(self):
+        if not self.wifi.is_connected():
+            self.wifi.connect()  # TODO: will need config help
         self.air.init_algo()
 
     def sensor_display_simple(self):

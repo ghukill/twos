@@ -1,2 +1,1 @@
-- wifi module
 - sd card configuration
