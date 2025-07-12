@@ -57,3 +57,7 @@ class Display:
 
     def horizontal_line(self, line_num):
         self.line((0, line_num), (128, line_num))
+
+    def eight_text_lines(self, lines: list[tuple[str, int]]):
+        for text, line_num in lines:
+            self.simple_text(text, line_num)

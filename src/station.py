@@ -1,4 +1,3 @@
-import json
 import time
 
 from air import Air
@@ -58,20 +57,31 @@ class Station:
     def sensor_display_simple(self):
         self.display.clear()
 
+        lines = []
+
         # BME280
-        self.display.simple_text(f"Temp: {self.temp_hum_pres.get_temp_str()}", 0)
-        self.display.simple_text(f"Pres: {self.temp_hum_pres.get_pressure_str()}", 1)
-        self.display.simple_text(f"Hum: {self.temp_hum_pres.get_humidity_str()}", 2)
+        lines.append((f"Temp: {self.temp_hum_pres.get_temp_str()}", 0))
+        lines.append((f"Pres: {self.temp_hum_pres.get_pressure_str()}", 1))
+        lines.append((f"Hum: {self.temp_hum_pres.get_humidity_str()}", 2))
 
         # SGP32
-        self.display.simple_text(f"CO2: {self.air.get_co2eq_str()}", 3)
-        self.display.simple_text(f"TVOC: {self.air.get_tvoc_str()}", 4)
+        lines.append((f"CO2: {self.air.get_co2eq_str()}", 3))
+        lines.append((f"TVOC: {self.air.get_tvoc_str()}", 4))
 
         # LTR390
-        self.display.simple_text(f"AmbL: {self.light.get_als_str()}", 5)
-        self.display.simple_text(f"UVi: {self.light.get_uvi_str()}", 6)
+        lines.append((f"AmbL: {self.light.get_als_str()}", 5))
+        lines.append((f"UVi: {self.light.get_uvi_str()}", 6))
 
         # Operations
-        self.display.simple_text(
-            f"B:{self.battery.get_voltage_str()}, W:{self.wifi.is_connected_str()}", 7
+        lines.append(
+            (
+                f"B:{self.battery.get_voltage_str()}, W:{self.wifi.is_connected_str()}",
+                7,
+            )
         )
+
+        print("\n---------------------------")
+        for text, _ in lines:
+            print(text)
+        print("---------------------------")
+        self.display.eight_text_lines(lines)

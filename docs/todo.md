@@ -1,1 +1,4 @@
-- sd card configuration
+- create a `Station.get_reading()` which returns structured data
+  - called in main loop 
+  - append to a `data.jsonlines` file on SD card
+  - use to display to screen
