@@ -57,39 +57,3 @@ class Display:
 
     def horizontal_line(self, line_num):
         self.line((0, line_num), (128, line_num))
-
-    def draw_weather_icon(self):
-        fb = self.screen
-
-        # Sun
-        sun_x = 20
-        sun_y = 20
-        fb.circle(sun_x, sun_y, 6, 1)  # center, radius, color
-
-        # Sun rays
-        for dx, dy in [
-            (-10, 0),
-            (10, 0),
-            (0, -10),
-            (0, 10),
-            (-7, -7),
-            (7, -7),
-            (-7, 7),
-            (7, 7),
-        ]:
-            fb.line(sun_x, sun_y, sun_x + dx, sun_y + dy, 1)
-
-        # Cloud (simple arc and bottom line)
-        cloud_x = 60
-        cloud_y = 30
-        fb.ellipse(cloud_x, cloud_y, 20, 10, 1, True)  # filled ellipse
-
-        # Flatten bottom of cloud
-        fb.fill_rect(cloud_x - 20, cloud_y, 40, 10, 1)
-
-        # Raindrop under cloud
-        drop_x = cloud_x
-        drop_y = cloud_y + 18
-        fb.ellipse(drop_x, drop_y, 3, 5, 1, True)
-
-        self.show()

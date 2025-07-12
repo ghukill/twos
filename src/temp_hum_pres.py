@@ -10,8 +10,12 @@ class TempHumPres:
         i2c = get_i2c()
         self.bme = BME280(i2c=i2c, address=I2C_ADDRESS)
 
+    def c_to_f(self, c):
+        f = (c * 9 / 5) + 32
+        return f
+
     def get_temp_str(self):
-        return self.bme.values[0]
+        return "{:.2f}F".format(self.get_temp())
 
     def get_pressure_str(self):
         return self.bme.values[1]
@@ -19,8 +23,10 @@ class TempHumPres:
     def get_humidity_str(self):
         return self.bme.values[2]
 
-    def get_temp(self):
-        return self.bme.read_compensated_data()[0]
+    def get_temp(self) -> float:
+        """Returns fahrenheit"""
+        c = self.bme.read_compensated_data()[0]
+        return self.c_to_f(c)
 
     def get_pressure(self):
         return self.bme.read_compensated_data()[1]
