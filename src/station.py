@@ -13,7 +13,7 @@ class Station:
         t0 = time.time_ns()
         self.display = Display()
         self.battery = Battery()
-        self.wifi = WiFi()  # TODO: drive with config
+        self.wifi = WiFi(ssid="Ruby", password="DumpsterTurkey")  # TODO: use config
 
         self.temp_hum_pres = TempHumPres()
         self.air = Air()
@@ -30,8 +30,8 @@ class Station:
         self.display.draw_weather_icon()
 
     def warmup(self):
-        if not self.wifi.is_connected():
-            self.wifi.connect()  # TODO: will need config help
+        # if not self.wifi.is_connected():
+        #     self.wifi.connect()  # TODO: will need config help
         self.air.init_algo()
 
     def sensor_display_simple(self):
