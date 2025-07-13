@@ -4,6 +4,7 @@ from air import Air
 from battery import Battery
 from display import Display
 from light import Light
+from sensor import SensorValue
 from storage import Storage
 from temp_hum_pres import TempHumPres
 from wifi import WiFi
@@ -58,21 +59,11 @@ class Station:
         self.display.clear()
 
         lines = []
+        readings = self.get_sensor_readings()
+        for i, reading in enumerate(readings):
+            lines.append((str(reading), i))
 
-        # BME280
-        lines.append((f"Temp: {self.temp_hum_pres.get_temp_str()}", 0))
-        lines.append((f"Pres: {self.temp_hum_pres.get_pressure_str()}", 1))
-        lines.append((f"Hum: {self.temp_hum_pres.get_humidity_str()}", 2))
-
-        # SGP32
-        lines.append((f"CO2: {self.air.get_co2eq_str()}", 3))
-        lines.append((f"TVOC: {self.air.get_tvoc_str()}", 4))
-
-        # LTR390
-        lines.append((f"AmbL: {self.light.get_als_str()}", 5))
-        lines.append((f"UVi: {self.light.get_uvi_str()}", 6))
-
-        # Operations
+        # TODO: turn this into a system "sensor"?
         lines.append(
             (
                 f"B:{self.battery.get_voltage_str()}, W:{self.wifi.is_connected_str()}",
@@ -85,3 +76,11 @@ class Station:
             print(text)
         print("---------------------------")
         self.display.eight_text_lines(lines)
+
+    def get_sensor_readings(self) -> list:
+        """Return list of all sensor values"""
+        readings = []
+        readings.extend(self.temp_hum_pres.get_sensor_values())
+        readings.extend(self.air.get_sensor_values())
+        readings.extend(self.light.get_sensor_values())
+        return readings

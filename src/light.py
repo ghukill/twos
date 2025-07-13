@@ -1,4 +1,5 @@
 from lib import ltr390
+from sensor import SensorValue
 
 from utils import get_i2c
 
@@ -23,3 +24,10 @@ class Light:
     def get_uvi_str(self) -> str:
         """UV Index"""
         return str(self.ltr.uvi)
+
+    def get_sensor_values(self) -> list:
+        """Return list of SensorValue instances"""
+        return [
+            SensorValue("Amb", int(self.ltr.lux), "lum"),
+            SensorValue("UVi", self.ltr.uvi, ""),
+        ]

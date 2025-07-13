@@ -1,4 +1,5 @@
 from lib.bme280_float import BME280
+from sensor import SensorValue
 
 from utils import get_i2c
 
@@ -39,3 +40,11 @@ class TempHumPres:
 
     def get_dew_point(self):
         return self.bme.dew_point
+    
+    def get_sensor_values(self) -> list:
+        """Return list of SensorValue instances"""
+        return [
+            SensorValue("Temp", self.get_temp(), "F"),
+            SensorValue("Pres", self.get_pressure(), "hPa"),
+            SensorValue("Hum", self.get_humidity(), "%")
+        ]

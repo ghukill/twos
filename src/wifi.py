@@ -37,7 +37,7 @@ class WiFi:
         retries = 0
 
         while not self.wlan.isconnected() and retries < max_retries:
-            time.sleep(1)
+            time.sleep(2)
             retries += 1
             print(f"  Retry {retries}/{max_retries}...")
 

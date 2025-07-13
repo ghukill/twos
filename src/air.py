@@ -1,6 +1,7 @@
 import time
 
 from lib import adafruit_sgp30
+from sensor import SensorValue
 from utils import get_i2c
 
 
@@ -30,3 +31,10 @@ class Air:
 
     def get_tvoc_str(self):
         return f"{self.get_tvoc()} ppb"
+    
+    def get_sensor_values(self) -> list:
+        """Return list of SensorValue instances"""
+        return [
+            SensorValue("CO2", self.get_co2eq(), "ppm"),
+            SensorValue("TVOC", self.get_tvoc(), "ppb")
+        ]
