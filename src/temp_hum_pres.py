@@ -44,7 +44,7 @@ class TempHumPres:
     def get_sensor_values(self) -> list:
         """Return list of SensorValue instances"""
         return [
-            SensorValue("Temp", self.get_temp(), "F"),
-            SensorValue("Pres", self.get_pressure(), "hPa"),
-            SensorValue("Hum", self.get_humidity(), "%")
+            SensorValue("Temp", round(self.get_temp(), 2), "F"),
+            SensorValue("Pres", round(self.get_pressure() / 100, 2), "hPa"),
+            SensorValue("Hum", round(self.get_humidity(), 2), "%")
         ]
