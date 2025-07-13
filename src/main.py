@@ -31,12 +31,12 @@ def main():
         station = Station()
 
         station.welcome_display()
-        time.sleep(3)
+        # time.sleep(3)
 
         station.warmup()
 
         while True:
-            station.sensor_display_simple()
+            station.process_sensor_readings()
             time.sleep(5)
 
     except KeyboardInterrupt:
