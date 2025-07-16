@@ -1,1 +1,1 @@
-uvx gitingest --exclude-pattern "firmwares, uv.lock" -o docs/code.txt
+uvx gitingest --include-pattern "src" -o docs/code.txt

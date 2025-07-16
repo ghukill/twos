@@ -4,6 +4,7 @@ from air import Air
 from battery import Battery
 from display import Display
 from light import Light
+from mqtt import MQTT
 from sensor import SensorValue
 from storage import Storage
 from temp_hum_pres import TempHumPres
@@ -21,10 +22,9 @@ DEFAULT_STATION_CONFIG = {
         "local": {
             "filepath": None,
         },
-        "remote": {
-            "endpoint": None,
-            "username": None,
-            "password": None,
+        "mqtt": {
+            "broker": None,
+            "port": None,
         },
     },
 }
@@ -33,11 +33,21 @@ DEFAULT_STATION_CONFIG = {
 class Station:
     def __init__(self):
         t0 = time.time_ns()
+
+        # storage and config
         self.storage = Storage()
         self.config = self.load_config()
 
+        # peripherals
         self.display = Display()
         self.battery = Battery()
+
+        # comms
+        self.mqtt = MQTT(
+            f"esp32_twos_{self.config['name']}",
+            self.config["data"]["mqtt"]["broker"],
+            self.config["data"]["mqtt"]["port"],
+        )
         self.wifi = WiFi(
             ssid=self.config["wifi"]["ssid"],
             password=self.config["wifi"]["password"],
@@ -102,7 +112,11 @@ class Station:
         pass
 
     def send_sensor_readings(self, readings: list[SensorValue]):
-        pass
+        for sv in readings:
+            topic = f"twos/{self.config['name']}/{sv.name}"
+            message = str(sv.value)
+            print(f"Sending MQTT message: {topic} --> {message}")
+            self.mqtt.publish(topic, message)
 
     def process_sensor_readings(self):
         t0 = time.time_ns()
