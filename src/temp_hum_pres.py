@@ -1,3 +1,6 @@
+import json
+import time
+
 from lib.bme280_float import BME280
 from sensor import SensorValue
 
@@ -40,11 +43,50 @@ class TempHumPres:
 
     def get_dew_point(self):
         return self.bme.dew_point
-    
+
     def get_sensor_values(self) -> list:
         """Return list of SensorValue instances"""
         return [
             SensorValue("Temp", round(self.get_temp(), 2), "F"),
             SensorValue("Pres", round(self.get_pressure() / 100, 2), "hPa"),
-            SensorValue("Hum", round(self.get_humidity(), 2), "%")
+            SensorValue("Hum", round(self.get_humidity(), 2), "%"),
         ]
+
+    # TODO: eventually, move into base Sensor class?
+    def ha_mqtt_discover(self, station):
+        topic = f"homeassistant/sensor/{station.config['name']}/temperature/config"
+        payload = {
+            "name": "Temperature",
+            "state_topic": f"twos/{station.config['name']}/Temp",
+            "unique_id": f"{station.config['name']}_temperature",
+            "device_class": "temperature",
+            "unit_of_measurement": "F",
+            "device": station.ha_device_config,
+        }
+        station.mqtt.publish(topic, json.dumps(payload))
+
+        time.sleep(0.1)
+
+        topic = f"homeassistant/sensor/{station.config['name']}/pressure/config"
+        payload = {
+            "name": "Pressure",
+            "state_topic": f"twos/{station.config['name']}/Pres",
+            "unique_id": f"{station.config['name']}_pressure",
+            "device_class": "atmospheric_pressure",
+            "unit_of_measurement": "hPa",
+            "device": station.ha_device_config,
+        }
+        station.mqtt.publish(topic, json.dumps(payload))
+
+        time.sleep(0.1)
+
+        topic = f"homeassistant/sensor/{station.config['name']}/humidity/config"
+        payload = {
+            "name": "Humidity",
+            "state_topic": f"twos/{station.config['name']}/Hum",
+            "unique_id": f"{station.config['name']}_humidity",
+            "device_class": "humidity",
+            "unit_of_measurement": "%",
+            "device": station.ha_device_config,
+        }
+        station.mqtt.publish(topic, json.dumps(payload))

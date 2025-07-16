@@ -9,5 +9,3 @@ class SensorValue:
 
     def __str__(self):
         return f"{self.name}: {self.value} {self.unit}"
-
-    # TODO: create to HomeAssistant MQTT message?

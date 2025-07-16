@@ -53,9 +53,11 @@ class Station:
             password=self.config["wifi"]["password"],
         )
 
+        # sensors
         self.temp_hum_pres = TempHumPres()
         self.air = Air()
         self.light = Light()
+
         print(f"Station loaded: {time_diff_s(t0)}s")
 
     def load_config(self):
@@ -64,6 +66,16 @@ class Station:
             config = DEFAULT_STATION_CONFIG
             self.storage.write_config(config)
         return config
+
+    # TODO: drive from SD config
+    @property
+    def ha_device_config(self):
+        return {
+            "identifiers": [self.config["name"]],
+            "name": f"TWOS Station - {self.config['name']}",
+            "model": "TWOS.v1",
+            "manufacturer": "HenonDesigns",
+        }
 
     def welcome_display(self):
         self.display.screen.large_text("TWOS", x=0, y=0, m=3)
@@ -75,6 +87,12 @@ class Station:
     def warmup(self):
         if not self.wifi.is_connected():
             self.wifi.connect()
+
+        # TODO: consider moving to method
+        # TODO: add other sensors
+        for sensor in [self.temp_hum_pres]:
+            sensor.ha_mqtt_discover(self)
+
         self.air.init_algo()
 
     def get_sensor_readings(self) -> list:
