@@ -84,3 +84,31 @@ class Air:
     def set_humidity_update_interval(self, seconds: int):
         """Set how often to update humidity compensation (in seconds)"""
         self._humidity_update_interval = seconds
+
+    def ha_mqtt_discover(self, station):
+        import json
+        
+        # CO2 sensor
+        topic = f"homeassistant/sensor/{station.config['name']}/co2/config"
+        payload = {
+            "name": "CO2",
+            "state_topic": f"twos/{station.config['name']}/CO2",
+            "unique_id": f"{station.config['name']}_co2",
+            "device_class": "carbon_dioxide",
+            "unit_of_measurement": "ppm",
+            "device": station.ha_device_config,
+        }
+        station.mqtt.publish(topic, json.dumps(payload))
+        
+        time.sleep(0.1)
+        
+        # TVOC sensor
+        topic = f"homeassistant/sensor/{station.config['name']}/tvoc/config"
+        payload = {
+            "name": "TVOC",
+            "state_topic": f"twos/{station.config['name']}/TVOC",
+            "unique_id": f"{station.config['name']}_tvoc",
+            "unit_of_measurement": "ppb",
+            "device": station.ha_device_config,
+        }
+        station.mqtt.publish(topic, json.dumps(payload))

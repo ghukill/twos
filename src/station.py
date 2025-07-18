@@ -90,7 +90,7 @@ class Station:
 
         # TODO: consider moving to method
         # TODO: add other sensors
-        for sensor in [self.temp_hum_pres]:
+        for sensor in [self.temp_hum_pres, self.air, self.light]:
             sensor.ha_mqtt_discover(self)
 
         self.air.init_algo()
@@ -136,11 +136,65 @@ class Station:
             print(f"Sending MQTT message: {topic} --> {message}")
             self.mqtt.publish(topic, message)
 
+    def _average_sensor_readings(
+        self, all_readings: list[list[SensorValue]]
+    ) -> list[SensorValue]:
+        """Average multiple sets of sensor readings"""
+        if not all_readings:
+            return []
+
+        # Group readings by sensor name
+        readings_by_name = {}
+        for reading_set in all_readings:
+            for sv in reading_set:
+                if sv.name not in readings_by_name:
+                    readings_by_name[sv.name] = []
+                readings_by_name[sv.name].append(sv)
+
+        # Calculate averages for each sensor
+        averaged_readings = []
+        for sensor_name, sensor_values in readings_by_name.items():
+            # Get the first reading as a template
+            template = sensor_values[0]
+
+            # Calculate average value
+            values = [sv.value for sv in sensor_values]
+            avg_value = sum(values) / len(values)
+
+            # Create averaged sensor reading
+            averaged_sv = SensorValue(
+                name=template.name, value=round(avg_value, 2), unit=template.unit
+            )
+            averaged_readings.append(averaged_sv)
+
+        return averaged_readings
+
     def process_sensor_readings(self):
         t0 = time.time_ns()
-        readings = self.get_sensor_readings()
-        self.print_sensor_readings(readings)
-        self.display_sensor_readings(readings)
-        self.store_sensor_readings(readings)
-        self.send_sensor_readings(readings)
+
+        # Collect multiple readings over 30 seconds (6 readings, 5 seconds apart)
+        all_readings = []
+        num_samples = 6
+        sample_interval = 5  # seconds
+
+        print(
+            f"Collecting {num_samples} sensor samples over {(num_samples - 1) * sample_interval} seconds..."
+        )
+
+        for i in range(num_samples):
+            sample_readings = self.get_sensor_readings()
+            all_readings.append(sample_readings)
+            print(f"  Sample {i + 1}/{num_samples} collected")
+
+            # Sleep between samples (except after the last one)
+            if i < num_samples - 1:
+                time.sleep(sample_interval)
+
+        # Average the readings
+        averaged_readings = self._average_sensor_readings(all_readings)
+
+        self.print_sensor_readings(averaged_readings)
+        self.display_sensor_readings(averaged_readings)
+        self.store_sensor_readings(averaged_readings)
+        self.send_sensor_readings(averaged_readings)
         print(f"Sensor processing elapsed: {time_diff_s(t0)}s")

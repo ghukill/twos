@@ -37,7 +37,6 @@ def main():
 
         while True:
             station.process_sensor_readings()
-            time.sleep(5)
 
     except KeyboardInterrupt:
         print("\nShutdown requested by user")
