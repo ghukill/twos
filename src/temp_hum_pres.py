@@ -60,10 +60,10 @@ class TempHumPres:
             "state_topic": f"twos/{station.config['name']}/Temp",
             "unique_id": f"{station.config['name']}_temperature",
             "device_class": "temperature",
-            "unit_of_measurement": "F",
+            "unit_of_measurement": "°F",
             "device": station.ha_device_config,
         }
-        station.mqtt.publish(topic, json.dumps(payload))
+        station.mqtt.publish(topic, json.dumps(payload).encode("utf-8"))
 
         time.sleep(0.1)
 
