@@ -89,9 +89,11 @@ class Station:
             self.wifi.connect()
 
         # TODO: consider moving to method
-        # TODO: add other sensors
         for sensor in [self.temp_hum_pres, self.air, self.light]:
             sensor.ha_mqtt_discover(self)
+
+        # Add battery to HA discovery
+        self.battery.ha_mqtt_discover(self.mqtt, self)
 
         self.air.init_algo()
 
@@ -101,6 +103,7 @@ class Station:
         readings.extend(self.temp_hum_pres.get_sensor_values())
         readings.extend(self.air.get_sensor_values())
         readings.extend(self.light.get_sensor_values())
+        readings.extend(self.battery.get_sensor_values())
         return readings
 
     def print_sensor_readings(self, readings: list[SensorValue]):
@@ -111,6 +114,8 @@ class Station:
 
     def display_sensor_readings(self, readings: list[SensorValue]):
         self.display.clear()
+
+        readings = [reading for reading in readings if reading.name != "Battery"]
 
         lines = []
         for i, reading in enumerate(readings):
